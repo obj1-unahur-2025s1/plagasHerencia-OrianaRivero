@@ -1,9 +1,89 @@
-import example.pepita
+import example.*
 
-describe "group of tests for pepita" {
+describe "group of tests de plagas" {
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
-  }
+    method initialize(){
+        const cucarachas = new Cucarachas(poblacion = 10, peso = 5)
+        const pulgas = new Pulgas(poblacion = 5)
+        const garrapatas = new Garrapatas(poblacion = 8)
+        const mosquitos = new Mosquitos(poblacion = 50)
 
+        const casa = new Hogar(mugre = 20, confort = 10)
+        const huerta = new Huerta(produccion = 30, nivel = 10)
+        const perro = new Mascota(salud = 100)
+    }
+
+    test "Las 10 cucarachas de 5 gramos después de atacar un hogar con 20 de mugre y 10 confort"{
+        const cucarachas = new Cucarachas(poblacion = 10, peso = 5)
+        const casa = new Hogar(mugre = 20, confort = 10)
+
+        cucarachas.atacar(casa)
+        assert.equals(25.5 ,casa.mugre())
+        assert.equals(7 ,cucarachas.peso())
+        assert.equals(11 ,cucarachas.poblacion())
+    }
+
+    test "Las 5 pulgas después de atacar un perro con 100 de salud, entonces el perro no es bueno y sigue 100 saludable"{
+        const pulgas = new Pulgas(poblacion = 5)
+        const perro = new Mascota(salud = 100)
+        
+        pulgas.atacar(perro)
+        assert.notThat(perro.esBueno())
+        assert.equals(100, perro.saludable())
+        assert.equals(5.5, pulgas.poblacion())
+    }
+
+    test "Las 10 pulgas despues de atacar un perro con 500 de salud, entonces el perro es bueno y queda con 500 de salud"{
+        const pulgas = new Pulgas(poblacion = 10)
+        const perro = new Mascota(salud = 500)
+
+        pulgas.atacar(perro)
+        assert.that(perro.esBueno())
+        assert.equals(11 ,pulgas.poblacion())
+        assert.equals(478 ,perro.saludable())
+    }
+
+    test "Las 20 garrapatas despues de atacar un gato con 500 de salud, entonces el gato es bueno y queda con de salud"{
+        const garrapatas = new Garrapatas(poblacion = 20)
+        const gato = new Mascota(salud = 500)
+
+        garrapatas.atacar(gato)
+        assert.that(gato.esBueno())
+        assert.that(garrapatas.transmiteEnfermedades())
+        assert.equals(24.2 , garrapatas.poblacion())
+        assert.equals(456, gato.saludable())
+    }
+
+    test "Los 50 mosquitos despues de atacar a la huerta de 30 produccion"{
+        const mosquitos = new Mosquitos(poblacion = 50)
+        const huerta = new Huerta(produccion = 30, nivel = 10)
+
+        mosquitos.atacar(huerta)
+        assert.notThat(mosquitos.transmiteEnfermedades())
+        assert.equals(24.5, huerta.produccion())
+    }
+
+    test "El barrio Hurlingham con la huerta con 30 de produccion, 
+        el gato con 500 de salud y 
+        la casa con 20 de mugre y 10 de confort, es copado"{
+            const huerta = new Huerta(produccion = 30, nivel = 10)
+            const gato = new Mascota(salud = 500)
+            const casa = new Hogar(mugre = 20, confort = 10)
+
+            const hurlingham = new Barrios(elementos = [huerta, gato, casa])
+
+            assert.that(hurlingham.esCopado())
+        }
+
+    test "El barrio moron con la huerta con 5 de produccion, 
+        el gato con 300 de salud y 
+        la casa con 20 de mugre y 10 de confort, no es copado"{
+            const huerta = new Huerta(produccion = 5, nivel = 10)
+            const gato = new Mascota(salud = 300)
+            const casa = new Hogar(mugre = 20, confort = 10)
+
+            const moron = new Barrios(elementos = [huerta, gato, casa])
+
+            assert.notThat(moron.esCopado())
+        }
 }
